@@ -6,13 +6,13 @@ const app = express()
 const PORT = process.env.PORT || 5000;
 app.use(express.json())
 app.use("/notes",(req, res) => {
-    res.sendFile(path.join(__dirname, "../../notes.html"))
+    res.sendFile( "notes.html", {root: "Develop/public"})
     })
-app.use("/",express.static(path.join(__dirname, "../../../public")))
+app.use("/",express.static("./Develop/public"))
 
 app.get('/api/notes', async (req, res) => {
     let notes = "hello"
-    await fs.readFile("../../../db/db.json", "utf8",  (err,data)=> {
+    await fs.readFile("Develop/db/db.json", "utf8",  (err,data)=> {
         if (err)console.error(err)
         else {
             notes = data
@@ -23,10 +23,10 @@ app.get('/api/notes', async (req, res) => {
 })
 
 app.post('/api/notes', async (req, res) => {
-    let notes = require("../../../db/db.json")
+    const notes = require("../../../db/db.json")
     notes.push(req.body)
     console.log(notes)
-    fs.writeFile("../../../db/db.json", JSON.stringify(notes), (err) => {
+    fs.writeFile("Develop/db/db.json", JSON.stringify(notes), (err) => {
         if (err) return console.error(err)
         else console.log("Notes Saved!")
         res.status(200)
